@@ -2,7 +2,7 @@
 
 static void OnTick()
 {
-	static constexpr int MAX_WHALES = 20;
+	static constexpr int MAX_WHALES = 100;
 	static const Hash WHALE_MODEL = 1193010354;
 
 	static Ped whales[MAX_WHALES] = {};
@@ -14,7 +14,7 @@ static void OnTick()
 	static DWORD64 lastTick = 0;
 	DWORD64 curTick = GET_GAME_TIMER();
 
-	if (whaleAmount <= MAX_WHALES && curTick > lastTick + 200)
+	if (whaleAmount <= MAX_WHALES && curTick > lastTick + 50)
 	{
 		lastTick = curTick;
 
