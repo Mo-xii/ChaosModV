@@ -55,7 +55,7 @@ static void OnTick()
 	}
 	Vector3 entityCoord = GET_ENTITY_COORDS(veh, false);
 	Vector3 playerCoord = GET_ENTITY_COORDS(PLAYER_PED_ID(), false);
-	if (!_IS_VEHICLE_DAMAGED(veh) && currenttick % 7 == 1 && GET_DISTANCE_BETWEEN_COORDS(entityCoord.x, entityCoord.y, entityCoord.z, playerCoord.x, playerCoord.y, playerCoord.z, true) > 150.0f) {
+	if (!GET_DOES_VEHICLE_HAVE_DAMAGE_DECALS(veh) && currenttick % 7 == 1 && GET_DISTANCE_BETWEEN_COORDS(entityCoord.x, entityCoord.y, entityCoord.z, playerCoord.x, playerCoord.y, playerCoord.z, true) > 150.0f) {
 		APPLY_FORCE_TO_ENTITY(veh, 1, (entityCoord.x - (playerCoord.x + offsetx)) * -1.f, (entityCoord.y - (playerCoord.y + offsety)) * -1.f, (entityCoord.z - playerCoord.z) * -1.f, 0, 0, 0, false, false, true, true, false, true);
 	}
 
@@ -63,8 +63,8 @@ static void OnTick()
 }
 
 
-
-static RegisterEffect registerEffect(EFFECT_MISC_MAJOR_TURBULENCE, OnStart, nullptr, OnTick, EffectInfo
+// clang-format off
+REGISTER_EFFECT(OnStart, nullptr, OnTick, EffectInfo
 	{
 
 		.Name = "Major Turbulence",

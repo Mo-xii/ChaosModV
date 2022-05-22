@@ -121,11 +121,12 @@ static void onTickBalled()
     }
 }
 
-static RegisterEffect registerEffect(EFFECT_MISC_BLUEBALLED, nullptr, nullptr, onTickBalled, EffectInfo
+// clang-format off
+REGISTER_EFFECT(nullptr, nullptr, onTickBalled, EffectInfo
     {
         .Name = "Get Blueballed",
         .Id = "misc_blueballed",
         .IsTimed = true,
-        .EEffectGroupType = EEffectGroupType::SpawnGeneric
+        .EffectGroupType = EEffectGroupType::SpawnGeneric
     }
 );

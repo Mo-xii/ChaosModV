@@ -388,11 +388,12 @@ static void OnStartKosatka()
 	CreatePoolVehicle(GET_HASH_KEY("kosatka"), playerPos.x, playerPos.y, playerPos.z, GET_ENTITY_HEADING(PLAYER_PED_ID()));
 }
 
-static RegisterEffect registerEffect17(EFFECT_SPAWN_KOSATKA, OnStartKosatka, EffectInfo
+// clang-format off
+REGISTER_EFFECT(OnStartKosatka, nullptr, nullptr, EffectInfo
 	{
 		.Name = "Spawn Kosatka",
 		.Id = "spawn_kosatka",
-		.EEffectGroupType = EEffectGroupType::SpawnGeneric
+		.EffectGroupType = EEffectGroupType::SpawnGeneric
 	}
 );
 static void OnStartFreight()
@@ -402,11 +403,12 @@ static void OnStartFreight()
 	CreatePoolVehicle(GET_HASH_KEY("freight"), playerPos.x, playerPos.y, playerPos.z, GET_ENTITY_HEADING(PLAYER_PED_ID()));
 }
 
-static RegisterEffect registerEffect18(EFFECT_SPAWN_FREIGHT, OnStartFreight, EffectInfo
+// clang-format off
+REGISTER_EFFECT(OnStartFreight, nullptr, nullptr, EffectInfo
 	{
 		.Name = "Spawn Freight",
 		.Id = "spawn_freight",
-		.EEffectGroupType = EEffectGroupType::SpawnGeneric
+		.EffectGroupType = EEffectGroupType::SpawnGeneric
 	}
 );
 static void OnStartAKuruma()
@@ -441,11 +443,12 @@ static void OnStartAKuruma()
 	_SET_VEHICLE_XENON_LIGHTS_COLOR(veh, 6);
 }
 
-static RegisterEffect registerEffect19(EFFECT_SPAWN_ARMORED_KURUMA, OnStartAKuruma, EffectInfo
+// clang-format off
+REGISTER_EFFECT(OnStartAKuruma, nullptr, nullptr, EffectInfo
 	{
 		.Name = "Spawn Armored Kuruma",
 		.Id = "spawn_armored_kuruma",
-		.EEffectGroupType = EEffectGroupType::SpawnGeneric
+		.EffectGroupType = EEffectGroupType::SpawnGeneric
 	}
 );
 static void OnStartHandler()
@@ -455,11 +458,12 @@ static void OnStartHandler()
 	CreatePoolVehicle(GET_HASH_KEY("handler"), playerPos.x, playerPos.y, playerPos.z, GET_ENTITY_HEADING(PLAYER_PED_ID()));
 }
 
-static RegisterEffect registerEffect20(EFFECT_SPAWN_HANDLER, OnStartHandler, EffectInfo
+// clang-format off
+REGISTER_EFFECT(OnStartHandler, nullptr, nullptr, EffectInfo
 	{
 		.Name = "Spawn Handler",
 		.Id = "spawn_handler",
-		.EEffectGroupType = EEffectGroupType::SpawnGeneric
+		.EffectGroupType = EEffectGroupType::SpawnGeneric
 	}
 );
 
@@ -488,10 +492,11 @@ static void OnStartBedmobile()
 	ATTACH_ENTITY_TO_ENTITY(bed, veh, 0, 0, -1.25, -0.65, 0, 0, 180, true, false, false, false, 0, true);
 }
 
-static RegisterEffect registerEffect21(EFFECT_VEHS_BEDMOBILE, OnStartBedmobile, nullptr, nullptr, EffectInfo
+// clang-format off
+REGISTER_EFFECT(OnStartBedmobile, nullptr, nullptr, EffectInfo
 	{
 		.Name = "Spawn Bedmobile",
 		.Id = "vehs_spawn_bedmobile",
-		.EEffectGroupType = EEffectGroupType::SpawnGeneric
+		.EffectGroupType = EEffectGroupType::SpawnGeneric
 	}
 );

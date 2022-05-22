@@ -1,4 +1,5 @@
 #include <stdafx.h>
+#include <Util/Types.h>
 
 #define FAN_GIRLS_AMOUNT 5
 
@@ -28,10 +29,11 @@ static void OnStart()
 	}
 }
 
-static RegisterEffect registerEffect(EFFECT_SPAWN_FAN_GIRLS, OnStart, EffectInfo
+// clang-format off
+REGISTER_EFFECT(OnStart, nullptr, nullptr, EffectInfo
 	{
 		.Name = "Spawn Fan Girls",
 		.Id = "peds_spawnfangirls",
-		.EEffectGroupType = EEffectGroupType::SpawnCompanion
+		.EffectGroupType = EEffectGroupType::SpawnCompanion
 	}
 );

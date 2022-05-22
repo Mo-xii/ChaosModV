@@ -79,7 +79,8 @@ static void OnStart()
 	}
 }
 
-static RegisterEffect registerEffect(EFFECT_PLAYER_CLONE_ARMY, OnStart, EffectInfo
+// clang-format off
+REGISTER_EFFECT(OnStart, nullptr, nullptr, EffectInfo
 	{
 		.Name = "Spawn Clone Army",
 		.Id = "player_clone_army"

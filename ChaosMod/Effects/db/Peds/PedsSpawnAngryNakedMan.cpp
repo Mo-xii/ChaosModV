@@ -3,6 +3,7 @@ Effect by Last0xygen & Moxi
 */
 
 #include <stdafx.h>
+#include <Util/Peds.h>
 
 static void OnStart()
 {
@@ -15,10 +16,11 @@ static void OnStart()
 
 }
 
-static RegisterEffect registerEffect(EFFECT_PEDS_SPAWN_ANGRY_NAKED_MAN, OnStart, nullptr, nullptr, EffectInfo
+// clang-format off
+REGISTER_EFFECT(OnStart, nullptr, nullptr, EffectInfo
     {
         .Name = "Spawn Angry Naked Man",
         .Id = "peds_spawn_angry_naked_man",
-        .EEffectGroupType = EEffectGroupType::SpawnEnemy
+        .EffectGroupType = EEffectGroupType::SpawnEnemy
     }
 );

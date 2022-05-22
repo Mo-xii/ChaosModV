@@ -36,10 +36,11 @@ static void OnStart()
 	SET_PED_FIRING_PATTERN(ped, 0xC6EE6B4C);
 }
 
-static RegisterEffect registerEffect(EFFECT_SPAWN_COMPANION_UBER_CHIMP, OnStart, EffectInfo
+// clang-format off
+REGISTER_EFFECT(OnStart, nullptr, nullptr, EffectInfo
 	{
 		.Name = "Spawn Companion Uber Chimp",
 		.Id = "spawn_uber_chimp",
-		.EEffectGroupType = EEffectGroupType::SpawnCompanion
+		.EffectGroupType = EEffectGroupType::SpawnCompanion
 	}
 );

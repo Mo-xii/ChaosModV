@@ -73,7 +73,8 @@ static void OnTick()
 
 }
 
-static RegisterEffect registerEffect(EFFECT_BATTLE_BUS, OnStart, OnStop, OnTick, EffectInfo
+// clang-format off
+REGISTER_EFFECT(OnStart, OnStop, OnTick, EffectInfo
 	{
 		// These are always required, you may have to add more designators depending on your effect
 		.Name = "Where We Droppin?",

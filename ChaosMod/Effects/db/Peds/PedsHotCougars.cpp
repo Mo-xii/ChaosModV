@@ -3,6 +3,7 @@
 */
 
 #include <stdafx.h>
+#include <Util/Types.h>
 
 static std::list<Ped> cougarEnemies;
 static int spawnTimer = -1;
@@ -122,7 +123,8 @@ static void OnTick()
 	}
 }
 
-static RegisterEffect registerEffect(EFFECT_HOT_COUGARS, OnStart, OnStop, OnTick, EffectInfo
+// clang-format off
+REGISTER_EFFECT(OnStart, OnStop, OnTick, EffectInfo
 	{
 		.Name = "Hot Cougars In Your Area",
 		.Id = "peds_hotcougars",

@@ -37,12 +37,13 @@ static void OnStop()
     leanedCamera = 0;
 }
 
-static RegisterEffect registerEffect(EFFECT_LEANED_CAMERA, OnStart, OnStop, OnTick, EffectInfo
+// clang-format off
+REGISTER_EFFECT(OnStart, OnStop, OnTick, EffectInfo
 	{
 		.Name = "Leaned Camera",
 		.Id = "player_leaned_camera",
 		.IsTimed = true,
 		.IsShortDuration = true,
-		.IncompatibleWith = { EFFECT_PLAYER_QUAKE_FOV, EFFECT_PLAYER_GTA_2, EFFECT_PLAYER_BINOCULARS, EFFECT_LEANED_CAMERA, EFFECT_PLAYER_ZOOMZOOM_CAM, EFFECT_FLIP_CAMERA, EFFECT_PLAYER_SICK_CAM }
+        .EffectCategory = EEffectCategory::Camera
 	}
 );

@@ -52,10 +52,11 @@ static void OnStart()
 	TASK_COMBAT_PED(ton, playerPed, 0, 16);
 }
 
-static RegisterEffect registerEffect(EFFECT_SPAWN_TOWING_TONYA, OnStart, EffectInfo
+// clang-format off
+REGISTER_EFFECT(OnStart, nullptr, nullptr, EffectInfo
 	{
 		.Name = "Spawn Towing Tonya",
 		.Id = "peds_towingtonya",
-		.EEffectGroupType = EEffectGroupType::SpawnEnemy
+		.EffectGroupType = EEffectGroupType::SpawnEnemy
 	}
 );
