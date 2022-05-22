@@ -33,10 +33,11 @@ static void OnStart()
 	}
 }
 
-static RegisterEffect registerEffect(EFFECT_EXPLODE_VEHS, OnStart, EffectInfo
+// clang-format off
+REGISTER_EFFECT(OnStart, nullptr, nullptr, EffectInfo
 	{
 		.Name = "Explode All Nearby Vehicles",
 		.Id = "vehs_explode",
-		.IncompatibleWith = { EFFECT_VEHS_INVINCIBLE }
+		.IncompatibleWith = { "vehs_invincible" }
 	}
 );
