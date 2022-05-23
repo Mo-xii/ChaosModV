@@ -84,12 +84,13 @@ static void OnTick()
 	}
 }
 
-static RegisterEffect registerEffect(EFFECT_EXTREME_WHALE_RAIN, nullptr, nullptr, OnTick, EffectInfo
+// clang-format off
+REGISTER_EFFECT(nullptr, nullptr, OnTick, EffectInfo
 	{
 		.Name = "Secret Extreme Whale Rain",
 		.Id = "world_extremewhalerain",
 		.IsTimed = true,
 		.IsShortDuration = true,
-		.EEffectGroupType = EEffectGroupType::SpawnGeneric
+		.EffectGroupType = EEffectGroupType::SpawnGeneric
 	}
 );

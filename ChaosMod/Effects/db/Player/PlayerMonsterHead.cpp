@@ -19,7 +19,8 @@ static void OnStart()
 	SET_ENTITY_AS_NO_LONGER_NEEDED(&monsterHead);
 }
 
-static RegisterEffect registerEffect(EFFECT_PLAYER_MONSTER_HEAD, OnStart, EffectInfo
+// clang-format off
+REGISTER_EFFECT(OnStart, nullptr, nullptr, EffectInfo
 	{
 		.Name = "Monster Head",
 		.Id = "player_monster_head"

@@ -3,6 +3,7 @@
 */
 
 #include <stdafx.h>
+#include <Util/Types.h>
 
 static std::map<Ped, Entity> kamiBomb;
 static int spawnTimer = -1;
@@ -112,7 +113,8 @@ static void OnTick()
 	}
 }
 
-static RegisterEffect registerEffect(EFFECT_PEDS_SERIOUS_KAMIKAZES, OnStart, OnStop, OnTick, EffectInfo
+// clang-format off
+REGISTER_EFFECT(OnStart, OnStop, OnTick, EffectInfo
 	{
 		.Name = "Serious Kamikazes",
 		.Id = "peds_seriouskamikazes",

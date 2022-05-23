@@ -27,10 +27,11 @@ static void OnStart()
     REMOVE_ANIM_DICT("rcmnigel1bnmt_1b");
 }
 
-static RegisterEffect registerEffect(EFFECT_SPAWN_HOTTUB, OnStart, nullptr, nullptr, EffectInfo
+// clang-format off
+REGISTER_EFFECT(OnStart, nullptr, nullptr, EffectInfo
     {
         .Name = "Spawn Twitch Streamer",
         .Id = "misc_spawn_hottub",
-        .EEffectGroupType = EEffectGroupType::SpawnGeneric
+        .EffectGroupType = EEffectGroupType::SpawnGeneric
     }
 );

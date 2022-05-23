@@ -129,7 +129,8 @@ static void OnStop()
 	vehicles.clear();
 }
 
-static RegisterEffect registerEffect(EFFECT_VEHS_WIGGLE_WIGGLE, nullptr, OnStop, OnTick, EffectInfo
+// clang-format off
+REGISTER_EFFECT(nullptr, OnStop, OnTick, EffectInfo
 	{
 		.Name = "Wiggle-Wiggle",
 		.Id = "vehs_wiggle_wiggle",
