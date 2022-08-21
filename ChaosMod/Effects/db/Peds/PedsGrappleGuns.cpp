@@ -10,7 +10,7 @@ static void OnStart()
 	{
 		CLEAR_ENTITY_LAST_WEAPON_DAMAGE(ped);
 	}
-
+	
 	for (Vehicle veh : GetAllVehs())
 	{
 		CLEAR_ENTITY_LAST_WEAPON_DAMAGE(veh);
