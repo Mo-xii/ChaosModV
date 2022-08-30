@@ -3,6 +3,7 @@
 */
 
 #include <stdafx.h>
+#include <Util/Peds.h>
 #include <Util/Types.h>
 
 static std::list<Ped> cougarEnemies;
@@ -46,17 +47,16 @@ static void OnTick()
 	static DWORD64 lastTick = GET_GAME_TIMER();
 	DWORD64 curTick = GET_GAME_TIMER();
 
-	if (lastTick < curTick - 2000)
+	if (lastTick < current_time - 100)
 	{
-		lastTick = curTick;
+		lastTick  = current_time;
 
-		int count = 3;
-
-		for (std::list<Entity>::iterator it = cougarEnemies.begin(); it != cougarEnemies.end(); )
+		for (std::list<Ped>::iterator it = cougarEnemies.begin(); it != cougarEnemies.end(); )
 		{
 			Ped cougar = *it;
 			Vector3 cougarPos = GET_ENTITY_COORDS(cougar, false);
-			if (IS_PED_DEAD_OR_DYING(cougar, false) || IS_PED_INJURED(cougar) || GET_DISTANCE_BETWEEN_COORDS(playerPos.x, playerPos.y, playerPos.z, cougarPos.x, cougarPos.y, cougarPos.z, false) > 100.f)
+			if (IS_PED_DEAD_OR_DYING(cougar, false) || IS_PED_INJURED(cougar)
+			    || playerPos.DistanceTo(cougarPos) > 100.f)
 			{
 				SET_ENTITY_HEALTH(cougar, 0, 0);
 				USE_PARTICLE_FX_ASSET("core");
@@ -101,11 +101,9 @@ static void OnTick()
 		USE_PARTICLE_FX_ASSET("core");
 		START_PARTICLE_FX_NON_LOOPED_AT_COORD("exp_air_molotov", spawnPos.x, spawnPos.y, spawnPos.z, 0, 0, 0, 2, true, true, true);
 		WAIT(300);
-		Hash cougarHash = GET_HASH_KEY("a_c_mtlion");
-		LoadModel(cougarHash);
-		Ped ped = CreatePoolPed(28, cougarHash, spawnPos.x, spawnPos.y, spawnPos.z, 0.f);
-
-		SET_ENTITY_PROOFS(ped, false, true, false, false, false, false, false, false);
+		Ped ped = CreateHostilePed("a_c_mtlion"_hash, 0, &spawnPos);
+		SET_PED_COMBAT_ATTRIBUTES(ped, 1, true);
+		SET_PED_COMBAT_ATTRIBUTES(ped, 3, true);
 		SET_BLOCKING_OF_NON_TEMPORARY_EVENTS(ped, true);
 		SET_PED_RELATIONSHIP_GROUP_HASH(ped, relationshipGroup);
 		SET_PED_HEARING_RANGE(ped, 9999.f);
@@ -124,7 +122,7 @@ static void OnTick()
 }
 
 // clang-format off
-REGISTER_EFFECT(OnStart, OnStop, OnTick, EffectInfo
+REGISTER_EFFECT(nullptr, OnStop, OnTick, EffectInfo
 	{
 		.Name = "Hot Cougars In Your Area",
 		.Id = "peds_hotcougars",
