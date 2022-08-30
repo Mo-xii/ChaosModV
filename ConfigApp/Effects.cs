@@ -329,8 +329,6 @@ namespace ConfigApp
             { "misc_blueballed", new EffectInfo("Get Blueballed", EffectCategory.Misc, true) },
             { "misc_major_turbulence", new EffectInfo("Major Turbulence", EffectCategory.Misc, true) },
             { "misc_spawn_hottub", new EffectInfo("Spawn Twitch Streamer", EffectCategory.Misc)},
-            { "peds_grapple_guns", new EffectInfo("Gravity Guns", EffectCategory.Peds, true)},
-            { "peds_hotcougars", new EffectInfo("Hot Cougars In Your Area", EffectCategory.Peds, true, true) },
             { "peds_seriouskamikazes", new EffectInfo("Serious Kamikazes", EffectCategory.Peds, true, true) },
             { "peds_spawn_angry_naked_man", new EffectInfo("Spawn Angry Naked Man", EffectCategory.Peds) },
             { "peds_spawnfangirls", new EffectInfo("Spawn Fan Girls", EffectCategory.Peds) },
