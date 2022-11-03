@@ -38,8 +38,7 @@ static void OnStart()
 	}
 }
 
-// clang-format off
-REGISTER_EFFECT(OnStart, nullptr, nullptr, EffectInfo
+static RegisterEffect registerEffect(EFFECT_ROT_ALL_VEHS, OnStart, EffectInfo
 	{
 		.Name = "Flip All Vehicles",
 		.Id = "vehs_rotall"

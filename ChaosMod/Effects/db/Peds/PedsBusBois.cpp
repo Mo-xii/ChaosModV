@@ -1,23 +1,22 @@
-// effect by ProfessorBiddle
-
 #include <stdafx.h>
 
-#include "Util/Vehicle.h"
+//effect by ProfessorBiddle
 
 static void OnStart()
 {
-	// not sure exactly what to make this, 60 seemed to work ok
-	//  now it's 120 because why not
+	//not sure exactly what to make this, 60 seemed to work ok
+	// now it's 120 because why not
 	static const float maxDistance = 120.f;
 
-	SetSurroundingPedsInVehicles("bus"_hash, maxDistance);
+	static const Hash busHash = GET_HASH_KEY("BUS");
+
+	SetSurroundingPedsInVehicles(busHash, maxDistance);
 }
 
-// clang-format off
-REGISTER_EFFECT(OnStart, nullptr, nullptr, EffectInfo
+static RegisterEffect registerEffect(EFFECT_PEDS_BUSBOIS, OnStart, EffectInfo
 	{
 		.Name = "Bus Bois",
 		.Id = "peds_busbois",
-		.EffectGroupType = EEffectGroupType::TrafficSpawner
+		.EEffectGroupType = EEffectGroupType::TrafficSpawner
 	}
 );

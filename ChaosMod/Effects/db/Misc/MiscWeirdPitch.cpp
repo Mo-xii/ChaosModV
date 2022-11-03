@@ -12,12 +12,11 @@ static void OnTick()
 	Hooks::SetAudioPitch(g_Random.GetRandomInt(-900, 2000));
 }
 
-// clang-format off
-REGISTER_EFFECT(nullptr, OnStop, OnTick, EffectInfo
+static RegisterEffect registerEffect(EFFECT_WEIRD_PITCH, nullptr, OnStop, OnTick, EffectInfo
 	{
 		.Name = "Weird Pitch",
 		.Id = "misc_weirdpitch",
 		.IsTimed = true,
-		.EffectCategory = EEffectCategory::Pitch
+		.IncompatibleWith = { EFFECT_HIGH_PITCH, EFFECT_LOW_PITCH }
 	}
 );

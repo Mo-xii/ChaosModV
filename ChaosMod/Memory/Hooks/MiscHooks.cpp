@@ -1,11 +1,9 @@
 #include <stdafx.h>
 
-#include "Memory/Hooks/Hook.h"
-
 // Work around crash related to SET_PED_SHOOTS_AT_COORD
 // Thanks to Rainbomizer!
-void (*OG_crSkeleton_GetGlobalMtx)(__int64 skeleton, unsigned int ulId, void *matrix);
-void HK_crSkeleton_GetGlobalMtx(__int64 skeleton, unsigned int ulId, void *matrix)
+void(*OG_crSkeleton_GetGlobalMtx)(__int64 skeleton, unsigned int ulId, void* matrix);
+void HK_crSkeleton_GetGlobalMtx(__int64 skeleton, unsigned int ulId, void* matrix)
 {
 	if (!skeleton)
 	{
@@ -27,14 +25,14 @@ static bool OnHook()
 	handle = Memory::FindPattern("E8 ? ? ? ? 4D 03 F5");
 	if (!handle.IsValid())
 	{
-		LOG("crSkeleton::GetGlobalMtx not found!");
+		return false;
 	}
-	else
-	{
-		Memory::AddHook(handle.Into().Get<void>(), HK_crSkeleton_GetGlobalMtx, &OG_crSkeleton_GetGlobalMtx);
-	}
+
+	Memory::AddHook(handle.Into().Get<void>(), HK_crSkeleton_GetGlobalMtx, &OG_crSkeleton_GetGlobalMtx);
+
+	//
 
 	return true;
 }
 
-static RegisterHook registerHook(OnHook, nullptr, "MiscHooks", true);
+static RegisterHook registerHook(OnHook, "MiscHooks", true);

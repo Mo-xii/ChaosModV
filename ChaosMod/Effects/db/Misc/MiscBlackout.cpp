@@ -15,8 +15,7 @@ static void OnTick()
 	SET_ARTIFICIAL_LIGHTS_STATE(true);
 }
 
-// clang-format off
-REGISTER_EFFECT(OnStart, OnStop, OnTick, EffectInfo
+static RegisterEffect registerEffect(EFFECT_BLACKOUT, OnStart, OnStop, OnTick, EffectInfo
 	{
 		.Name = "Blackout",
 		.Id = "world_blackout",

@@ -16,8 +16,7 @@ static void OnTick()
 	}
 }
 
-// clang-format off
-REGISTER_EFFECT(nullptr, OnStop, OnTick, EffectInfo
+static RegisterEffect registerEffect(EFFECT_EVERYONE_INVINCIBLE, nullptr, OnStop, OnTick, EffectInfo
 	{
 		.Name = "Everyone Is Invincible",
 		.Id = "peds_invincible",

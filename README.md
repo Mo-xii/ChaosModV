@@ -33,11 +33,9 @@ git submodule update --recursive
 
 ## Adding new effects
 
-You can easily add and share your own effects using the integrated Lua scripting engine. See [here](https://github.com/gta-chaos-mod/ChaosModV/wiki/Lua-Scripting) for more information.
+1. Add a new effect enum entry to `ChaosMod/Effects/EffectsInfo.h`
 
-Otherwise, if you want to integrate your effect directly into the mod:
-
-1. Create a new .cpp file in the appropriate folder under `ChaosMod/Effects/db/` with a fitting name
+2. Create a new .cpp file in the appropriate folder under `ChaosMod/Effects/db/` with a fitting name
 
 Layout of the file should look like this:
 
@@ -63,8 +61,8 @@ static void OnTick()
 	
 }
 
-// clang-format off
-REGISTER_EFFECT(OnStart, OnStop, OnTick, EffectInfo
+// Any of these functions can be omitted and either replaced with a `nullptr` or completely left out (default parameter values) in the `RegisterEffect` declaration
+static RegisterEffect registerEffect(EFFECT_ENUM_ENTRY, OnStart, OnStop, OnTick, EffectInfo
 	{
 		// These are always required, you may have to add more designators depending on your effect
 		.Name = "Generic Effect",
@@ -73,6 +71,4 @@ REGISTER_EFFECT(OnStart, OnStop, OnTick, EffectInfo
 );
 ```
 
-The project makes use of clang-format which will mess up the formatting of the list-initialization, thus it's necessary to exempt it using `// clang-format off`.
-
-2. Add the same info to `ConfigApp/Effects.cs`
+3. Add the same info to `ConfigApp/Effects.cs`

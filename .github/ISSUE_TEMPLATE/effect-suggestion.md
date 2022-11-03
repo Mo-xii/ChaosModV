@@ -22,10 +22,8 @@ Before continuing, ensure that:
 **Name of effect**
 Potential name(s) for the effect
 
-**Duration (choose one and replace the corresponding "[ ]" with "[X]")**
-- [ ] Long
-- [ ] Short
-- [ ] No duration
+**Duration if timed effect (long or short timed?)**
+If not a timed effect, remove this section
 
 **Effect Description**
 Description of the effect; what should it do?

@@ -9,10 +9,10 @@ static void OnStart()
 	SET_RELATIONSHIP_BETWEEN_GROUPS(0, relationshipGroup, GET_HASH_KEY("PLAYER"));
 	SET_RELATIONSHIP_BETWEEN_GROUPS(0, GET_HASH_KEY("PLAYER"), relationshipGroup);
 
-	Ped playerPed     = PLAYER_PED_ID();
+	Ped playerPed = PLAYER_PED_ID();
 	Vector3 playerPos = GET_ENTITY_COORDS(playerPed, false);
 
-	Ped ped           = CreatePoolPed(4, model, playerPos.x, playerPos.y, playerPos.z, GET_ENTITY_HEADING(playerPed));
+	Ped ped = CreatePoolPed(4, model, playerPos.x, playerPos.y, playerPos.z, GET_ENTITY_HEADING(playerPed));
 	if (IS_PED_IN_ANY_VEHICLE(playerPed, false))
 	{
 		SET_PED_INTO_VEHICLE(ped, GET_VEHICLE_PED_IS_IN(playerPed, false), -2);
@@ -32,11 +32,10 @@ static void OnStart()
 	SET_PED_FIRING_PATTERN(ped, 0xC6EE6B4C);
 }
 
-// clang-format off
-REGISTER_EFFECT(OnStart, nullptr, nullptr, EffectInfo
+static RegisterEffect registerEffect(EFFECT_SPAWN_COMPANION_BRAD, OnStart, EffectInfo
 	{
 		.Name = "Spawn Companion Brad",
 		.Id = "spawn_compbrad",
-		.EffectGroupType = EEffectGroupType::SpawnCompanion
+		.EEffectGroupType = EEffectGroupType::SpawnCompanion
 	}
 );

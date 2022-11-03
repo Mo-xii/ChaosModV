@@ -16,8 +16,7 @@ static void OnTick()
 	}
 }
 
-// clang-format off
-REGISTER_EFFECT(nullptr, OnStop, OnTick, EffectInfo
+static RegisterEffect registerEffect(EFFECT_NO_GRAV_VEHS, nullptr, OnStop, OnTick, EffectInfo
 	{
 		.Name = "Vehicles Have No Gravity",
 		.Id = "vehs_nogravity",

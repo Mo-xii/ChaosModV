@@ -18,8 +18,7 @@ static void OnTick()
 	}
 }
 
-// clang-format off
-REGISTER_EFFECT(nullptr, nullptr, OnTick, EffectInfo
+static RegisterEffect registerEffect(EFFECT_EXPLOSIVE_COMBAT, nullptr, nullptr, OnTick, EffectInfo
 	{
 		.Name = "Explosive Combat",
 		.Id = "player_explosivecombat",

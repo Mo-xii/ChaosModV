@@ -8,7 +8,7 @@ static void OnStart()
 	{
 		Vehicle playerVeh = GET_VEHICLE_PED_IS_IN(playerPed, false);
 
-		int seats         = GET_VEHICLE_MODEL_NUMBER_OF_SEATS(GET_ENTITY_MODEL(playerVeh));
+		int seats = GET_VEHICLE_MODEL_NUMBER_OF_SEATS(GET_ENTITY_MODEL(playerVeh));
 
 		std::vector<Ped> pedPool;
 		for (Ped ped : GetAllPeds())
@@ -36,8 +36,7 @@ static void OnStart()
 	}
 }
 
-// clang-format off
-REGISTER_EFFECT(OnStart, nullptr, nullptr, EffectInfo
+static RegisterEffect registerEffect(EFFECT_VEH_TPRANDOMPEDS, OnStart, EffectInfo
 	{
 		.Name = "Teleport Random Peds Into Current Vehicle",
 		.Id = "playerveh_tprandompeds"

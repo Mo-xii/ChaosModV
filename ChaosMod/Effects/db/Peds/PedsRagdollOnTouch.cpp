@@ -16,13 +16,12 @@ static void OnTick()
 	}
 }
 
-// clang-format off
-REGISTER_EFFECT(nullptr, OnStop, OnTick, EffectInfo
+static RegisterEffect registerEffect(EFFECT_PEDS_RAGDOLL_ON_TOUCH, nullptr, OnStop, OnTick, EffectInfo
 	{
 		.Name = "Sensitive Touch",
 		.Id = "peds_sensitivetouch",
 		.IsTimed = true,
 		.IsShortDuration = true,
-		.IncompatibleWith = { "player_noragdoll" }
+		.IncompatibleWith = { EFFECT_NO_RAGDOLL }
 	}
 );

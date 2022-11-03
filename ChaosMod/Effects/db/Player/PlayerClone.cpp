@@ -20,14 +20,10 @@ static void OnStart()
 
 	Ped playerPed = PLAYER_PED_ID();
 
-	Ped ped       = CreatePoolClonePed(playerPed);
+	Ped ped = CLONE_PED(playerPed, GET_ENTITY_HEADING(playerPed), true, false);
 	if (IS_PED_IN_ANY_VEHICLE(playerPed, false))
 	{
 		SET_PED_INTO_VEHICLE(ped, GET_VEHICLE_PED_IS_IN(playerPed, false), -2);
-	}
-	else
-	{
-		SET_ENTITY_HEADING(ped, GET_ENTITY_HEADING(playerPed));
 	}
 
 	SET_PED_SUFFERS_CRITICAL_HITS(ped, false);
@@ -52,8 +48,7 @@ static void OnStart()
 	SET_PED_FIRING_PATTERN(ped, 0xC6EE6B4C);
 }
 
-// clang-format off
-REGISTER_EFFECT(OnStart, nullptr, nullptr, EffectInfo
+static RegisterEffect registerEffect(EFFECT_CLONE_PLAYER, OnStart, EffectInfo
 	{
 		.Name = "Clone Player",
 		.Id = "player_clone"
