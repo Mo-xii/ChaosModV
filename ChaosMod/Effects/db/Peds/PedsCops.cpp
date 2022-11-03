@@ -13,12 +13,11 @@ static void OnTick()
 	}
 }
 
-// clang-format off
-REGISTER_EFFECT(nullptr, nullptr, OnTick, EffectInfo
+static RegisterEffect registerEffect(EFFECT_PEDS_COPS, nullptr, nullptr, OnTick, EffectInfo
 	{
 		.Name = "All Peds Are Cops",
 		.Id = "peds_cops",
 		.IsTimed = true,
-		.IncompatibleWith = { "peds_riot" }
+		.IncompatibleWith = {EFFECT_PEDS_RIOT }
 	}
 );

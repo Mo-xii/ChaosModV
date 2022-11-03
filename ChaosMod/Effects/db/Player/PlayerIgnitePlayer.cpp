@@ -17,12 +17,11 @@ static void OnStart()
 	}
 }
 
-// clang-format off
-REGISTER_EFFECT(OnStart, nullptr, nullptr, EffectInfo
+static RegisterEffect registerEffect(EFFECT_IGNITE, OnStart, EffectInfo
 	{
 		.Name = "Ignite Player",
 		.Id = "player_ignite",
-		.IncompatibleWith = { "player_invincible" },
-		.EffectGroupType = EEffectGroupType::PlayerKill
+		.IncompatibleWith = { EFFECT_PLAYER_INVINCIBLE },
+		.EEffectGroupType = EEffectGroupType::PlayerKill
 	}
 );

@@ -16,12 +16,10 @@ static void OnTick()
 	}
 }
 
-// clang-format off
-REGISTER_EFFECT(nullptr, OnStop, OnTick, EffectInfo
+static RegisterEffect registerEffect(EFFECT_VEHS_INVINCIBLE, nullptr, OnStop, OnTick, EffectInfo
 	{
 		.Name = "All Vehicles Are Invulnerable",
 		.Id = "vehs_invincible",
-		.IsTimed = true,
-		.IncompatibleWith = { "vehs_ohko", "veh_speed_goal" }
+		.IsTimed = true
 	}
 );

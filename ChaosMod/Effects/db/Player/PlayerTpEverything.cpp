@@ -32,8 +32,7 @@ static void OnStart()
 
 		maxEntities--;
 
-		if ((!IS_PED_IN_ANY_VEHICLE(playerPed, false) || veh != GET_VEHICLE_PED_IS_IN(playerPed, false))
-		    && !IS_ENTITY_A_MISSION_ENTITY(veh))
+		if ((!IS_PED_IN_ANY_VEHICLE(playerPed, false) || veh != GET_VEHICLE_PED_IS_IN(playerPed, false)) && !IS_ENTITY_A_MISSION_ENTITY(veh))
 		{
 			SET_ENTITY_AS_MISSION_ENTITY(veh, true, true);
 			entities.push_back(veh);
@@ -56,8 +55,7 @@ static void OnStart()
 	}
 }
 
-// clang-format off
-REGISTER_EFFECT(OnStart, nullptr, nullptr, EffectInfo
+static RegisterEffect registerEffect(EFFECT_PLAYER_TPEVERYTHING, OnStart, EffectInfo
 	{
 		.Name = "Teleport Everything To Player",
 		.Id = "player_tpeverything"

@@ -4,6 +4,5 @@
 
 namespace Mp3Manager
 {
-	void PlayChaosSoundFile(const std::string &szSoundFile);
-	void ResetCache();
+	void PlayChaosSoundFile(const std::string& szSoundFile);
 }

@@ -16,12 +16,10 @@ static void OnTick()
 	}
 }
 
-// clang-format off
-REGISTER_EFFECT(nullptr, OnStop, OnTick, EffectInfo
+static RegisterEffect registerEffect(EFFECT_PEDS_INVISIBLE, nullptr, OnStop, OnTick, EffectInfo
 	{
 		.Name = "Everyone Is A Ghost",
 		.Id = "peds_ghost",
-		.IsTimed = true,
-		.IncompatibleWith = { "peds_prop_hunt", "misc_ghost_world" }
+		.IsTimed = true
 	}
 );

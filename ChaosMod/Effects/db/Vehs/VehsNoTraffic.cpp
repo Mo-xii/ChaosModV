@@ -8,8 +8,7 @@ static void OnTick()
 	SET_VEHICLE_DENSITY_MULTIPLIER_THIS_FRAME(.0f);
 }
 
-// clang-format off
-REGISTER_EFFECT(nullptr, nullptr, OnTick, EffectInfo
+static RegisterEffect registerEffect(EFFECT_NO_VEHS, nullptr, nullptr, OnTick, EffectInfo
 	{
 		.Name = "No Traffic",
 		.Id = "notraffic",

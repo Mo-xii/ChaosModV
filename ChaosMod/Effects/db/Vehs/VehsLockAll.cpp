@@ -8,8 +8,7 @@ static void OnStart()
 	}
 }
 
-// clang-format off
-REGISTER_EFFECT(OnStart, nullptr, nullptr, EffectInfo
+static RegisterEffect registerEffect(EFFECT_LOCK_VEHS, OnStart, EffectInfo
 	{
 		.Name = "Lock All Vehicles",
 		.Id = "vehs_lockdoors"

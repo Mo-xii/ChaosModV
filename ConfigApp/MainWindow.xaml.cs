@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -16,13 +15,13 @@ namespace ConfigApp
     public partial class MainWindow : Window
     {
         private bool m_initializedTitle = false;
-        
+
         private OptionsFile m_configFile = new OptionsFile("config.ini");
         private OptionsFile m_twitchFile = new OptionsFile("twitch.ini");
         private OptionsFile m_effectsFile = new OptionsFile("effects.ini");
 
-        private Dictionary<string, TreeMenuItem> m_treeMenuItemsMap;
-        private Dictionary<string, EffectData> m_effectDataMap;
+        private Dictionary<EffectType, TreeMenuItem> m_treeMenuItemsMap;
+        private Dictionary<EffectType, EffectData> m_effectDataMap;
 
         public MainWindow()
         {
@@ -103,14 +102,14 @@ namespace ConfigApp
             }
         }
 
-        private EffectData GetEffectData(string effectId)
+        private EffectData GetEffectData(EffectType effectType)
         {
             // Create EffectData in case effect wasn't saved yet
-            if (!m_effectDataMap.TryGetValue(effectId, out EffectData effectData))
+            if (!m_effectDataMap.TryGetValue(effectType, out EffectData effectData))
             {
-                effectData = new EffectData(EffectsMap[effectId].IsShort ? EffectTimedType.TimedShort : EffectTimedType.TimedNormal, -1, 5, false, false, null, 0);
+                effectData = new EffectData(EffectsMap[effectType].IsShort ? EffectTimedType.TIMED_SHORT : EffectTimedType.TIMED_NORMAL, -1, 5, false, false, null);
 
-                m_effectDataMap.Add(effectId, effectData);
+                m_effectDataMap.Add(effectType, effectData);
             }
 
             return effectData;
@@ -130,7 +129,7 @@ namespace ConfigApp
             misc_user_toggle_mod_shortcut.IsChecked = m_configFile.ReadValueBool("EnableToggleModShortcut", true);
             misc_user_effects_menu_enable.IsChecked = m_configFile.ReadValueBool("EnableDebugMenu", false);
             misc_user_effects_timer_pause_shortcut_enable.IsChecked = m_configFile.ReadValueBool("EnablePauseTimerShortcut", false);
-            misc_user_effects_max_running_effects.Text = m_configFile.ReadValue("MaxParallelRunningEffects", "99");
+            misc_user_toggle_mod_shortcut.IsChecked = m_configFile.ReadValueBool("EnableToggleModShortcut", true);
             if (m_configFile.HasKey("EffectTimerColor"))
             {
                 misc_user_effects_timer_color.SelectedColor = (Color)ColorConverter.ConvertFromString(m_configFile.ReadValue("EffectTimerColor"));
@@ -146,7 +145,6 @@ namespace ConfigApp
             misc_user_effects_disable_startup.IsChecked = m_configFile.ReadValueBool("DisableStartup", false);
             misc_user_effects_enable_group_weighting.IsChecked = m_configFile.ReadValueBool("EnableGroupWeightingAdjustments", true);
             misc_user_effects_enable_failsafe.IsChecked = m_configFile.ReadValueBool("EnableFailsafe", true);
-            misc_user_anti_softlock_shortcut.IsChecked = m_configFile.ReadValueBool("EnableAntiSoftlockShortcut", true);
 
             // Meta Effects
             meta_effects_spawn_dur.Text = m_configFile.ReadValue("NewMetaEffectSpawnTime", "600");
@@ -172,12 +170,6 @@ namespace ConfigApp
             m_configFile.WriteValue("DisableStartup", misc_user_effects_disable_startup.IsChecked.Value);
             m_configFile.WriteValue("EnableGroupWeightingAdjustments", misc_user_effects_enable_group_weighting.IsChecked.Value);
             m_configFile.WriteValue("EnableFailsafe", misc_user_effects_enable_failsafe.IsChecked.Value);
-            int runningEffects;
-            if (int.TryParse(misc_user_effects_max_running_effects.Text, out runningEffects) && runningEffects > 0)
-            {
-                m_configFile.WriteValue("MaxParallelRunningEffects", misc_user_effects_max_running_effects.Text);
-            }
-            m_configFile.WriteValue("EnableAntiSoftlockShortcut", misc_user_anti_softlock_shortcut.IsChecked.Value);
 
             // Meta Effects
             m_configFile.WriteValue("NewMetaEffectSpawnTime", meta_effects_spawn_dur.Text);
@@ -200,7 +192,6 @@ namespace ConfigApp
             twitch_user_chance_system_enable.IsChecked = m_twitchFile.ReadValueBool("TwitchVotingChanceSystem", false);
             twitch_user_chance_system_retain_chance_enable.IsChecked = m_twitchFile.ReadValueBool("TwitchVotingChanceSystemRetainChance", true);
             twitch_user_random_voteable_enable.IsChecked = m_twitchFile.ReadValueBool("TwitchRandomEffectVoteableEnable", true);
-            twitch_permitted_usernames.Text = m_twitchFile.ReadValue("TwitchPermittedUsernames");
         }
 
         private void WriteTwitchFile()
@@ -214,7 +205,6 @@ namespace ConfigApp
             m_twitchFile.WriteValue("TwitchVotingChanceSystem", twitch_user_chance_system_enable.IsChecked.Value);
             m_twitchFile.WriteValue("TwitchVotingChanceSystemRetainChance", twitch_user_chance_system_retain_chance_enable.IsChecked.Value);
             m_twitchFile.WriteValue("TwitchRandomEffectVoteableEnable", twitch_user_random_voteable_enable.IsChecked.Value);
-            m_twitchFile.WriteValue("TwitchPermittedUsernames", twitch_permitted_usernames.Text);
 
             m_twitchFile.WriteFile();
         }
@@ -227,21 +217,30 @@ namespace ConfigApp
             {
                 string value = m_effectsFile.ReadValue(key);
 
-                // Split by comma, ignoring commas in between quotation marks
-                string[] values = Regex.Split(value, ",(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))");
+                string[] values = value.Split(',');
 
-                if (!EffectsMap.TryGetValue(key, out EffectInfo effectInfo))
+                // Find EffectType from ID
+                EffectType effectType = EffectType._EFFECT_ENUM_MAX;
+                foreach (KeyValuePair<EffectType, EffectInfo> pair in EffectsMap)
+                {
+                    if (pair.Value.Id == key)
+                    {
+                        effectType = pair.Key;
+                        break;
+                    }
+                }
+
+                if (!EffectsMap.TryGetValue(effectType, out EffectInfo effectInfo))
                 {
                     continue;
                 }
 
-                EffectTimedType effectTimedType = effectInfo.IsShort ? EffectTimedType.TimedShort : EffectTimedType.TimedNormal;
+                EffectTimedType effectTimedType = effectInfo.IsShort ? EffectTimedType.TIMED_SHORT : EffectTimedType.TIMED_NORMAL;
                 int effectTimedTime = -1;
                 int effectWeight = 5;
                 bool effectPermanent = false;
                 bool effectExcludedFromVoting = false;
                 string effectCustomName = null;
-                int effectShortcut = 0;
 
                 // Compatibility checks, previous versions had less options
                 if (values.Length >= 4)
@@ -264,35 +263,31 @@ namespace ConfigApp
 
                             if (values.Length >= 7)
                             {
-                                effectCustomName = values[6] == "0" ? null : values[6].Trim('\"');
-                                if (values.Length >= 8)
-                                {
-                                    int.TryParse(values[7], out effectShortcut);
-                                }
+                                effectCustomName = values[6] == "0" ? null : values[6];
                             }
                         }
                     }
                 }
 
-                int.TryParse(values[0], out int enabled);
-                m_treeMenuItemsMap[key].IsChecked = enabled == 0 ? false : true;
+                if (effectType != EffectType._EFFECT_ENUM_MAX)
+                {
+                    int.TryParse(values[0], out int enabled);
+                    m_treeMenuItemsMap[effectType].IsChecked = enabled == 0 ? false : true;
 
-                m_effectDataMap.Add(key, new EffectData(effectTimedType, effectTimedTime, effectWeight, effectPermanent,
-                    effectExcludedFromVoting, effectCustomName, effectShortcut));
+                    m_effectDataMap.Add(effectType, new EffectData(effectTimedType, effectTimedTime, effectWeight, effectPermanent, effectExcludedFromVoting, effectCustomName));
+                }
             }
         }
 
         private void WriteEffectsFile()
         {
-            foreach (var pair in EffectsMap)
+            for (EffectType effectType = 0; effectType < EffectType._EFFECT_ENUM_MAX; effectType++)
             {
-                EffectData effectData = GetEffectData(pair.Key);
+                EffectData effectData = GetEffectData(effectType);
 
-                m_effectsFile.WriteValue(pair.Key, $"{(m_treeMenuItemsMap[pair.Key].IsChecked ? 1 : 0)}"
-                    + $",{(effectData.TimedType == EffectTimedType.TimedNormal ? 0 : 1)}"
+                m_effectsFile.WriteValue(EffectsMap[effectType].Id, $"{(m_treeMenuItemsMap[effectType].IsChecked ? 1 : 0)},{(effectData.TimedType == EffectTimedType.TIMED_NORMAL ? 0 : 1)}"
                     + $",{effectData.CustomTime},{effectData.WeightMult},{(effectData.Permanent ? 1 : 0)},{(effectData.ExcludedFromVoting ? 1 : 0)}"
-                    + $",\"{(string.IsNullOrEmpty(effectData.CustomName) ? "" : effectData.CustomName)}\""
-                    + $",{(effectData.Shortcut)}");
+                    + $",{(string.IsNullOrEmpty(effectData.CustomName) ? "0" : effectData.CustomName)}");
             }
 
             m_effectsFile.WriteFile();
@@ -300,56 +295,54 @@ namespace ConfigApp
 
         private void InitEffectsTreeView()
         {
-            m_treeMenuItemsMap = new Dictionary<string, TreeMenuItem>();
-            m_effectDataMap = new Dictionary<string, EffectData>();
+            m_treeMenuItemsMap = new Dictionary<EffectType, TreeMenuItem>();
+            m_effectDataMap = new Dictionary<EffectType, EffectData>();
 
             TreeMenuItem playerParentItem = new TreeMenuItem("Player");
             TreeMenuItem vehicleParentItem = new TreeMenuItem("Vehicle");
             TreeMenuItem pedsParentItem = new TreeMenuItem("Peds");
-            TreeMenuItem screenParentItem = new TreeMenuItem("Screen");
             TreeMenuItem timeParentItem = new TreeMenuItem("Time");
             TreeMenuItem weatherParentItem = new TreeMenuItem("Weather");
             TreeMenuItem miscParentItem = new TreeMenuItem("Misc");
             TreeMenuItem metaParentItem = new TreeMenuItem("Meta");
 
-            var sortedEffects = new SortedDictionary<string, Tuple<string, EffectCategory>>();
+            SortedDictionary<string, Tuple<EffectType, EffectCategory>> sortedEffects = new SortedDictionary<string, Tuple<EffectType, EffectCategory>>();
 
-            foreach (var pair in EffectsMap)
+            for (EffectType effectType = 0; effectType < EffectType._EFFECT_ENUM_MAX; effectType++)
             {
-                sortedEffects.Add(pair.Value.Name, new Tuple<string, EffectCategory>(pair.Key, pair.Value.EffectCategory));
+                EffectInfo effectInfo = EffectsMap[effectType];
+
+                sortedEffects.Add(effectInfo.Name, new Tuple<EffectType, EffectCategory>(effectType, effectInfo.EffectCategory));
             }
             
             foreach (var effect in sortedEffects)
             {
-                var effectTuple = effect.Value;
+                Tuple<EffectType, EffectCategory> effectTuple = effect.Value;
 
                 TreeMenuItem menuItem = new TreeMenuItem(effect.Key);
                 m_treeMenuItemsMap.Add(effectTuple.Item1, menuItem);
 
                 switch (effectTuple.Item2)
                 {
-                    case EffectCategory.Player:
+                    case EffectCategory.PLAYER:
                         playerParentItem.AddChild(menuItem);
                         break;
-                    case EffectCategory.Vehicle:
+                    case EffectCategory.VEHICLE:
                         vehicleParentItem.AddChild(menuItem);
                         break;
-                    case EffectCategory.Peds:
+                    case EffectCategory.PEDS:
                         pedsParentItem.AddChild(menuItem);
                         break;
-                    case EffectCategory.Screen:
-                        screenParentItem.AddChild(menuItem);
-                        break;
-                    case EffectCategory.Time:
+                    case EffectCategory.TIME:
                         timeParentItem.AddChild(menuItem);
                         break;
-                    case EffectCategory.Weather:
+                    case EffectCategory.WEATHER:
                         weatherParentItem.AddChild(menuItem);
                         break;
-                    case EffectCategory.Misc:
+                    case EffectCategory.MISC:
                         miscParentItem.AddChild(menuItem);
                         break;
-                    case EffectCategory.Meta:
+                    case EffectCategory.META:
                         metaParentItem.AddChild(menuItem);
                         break;
                 }
@@ -359,7 +352,6 @@ namespace ConfigApp
             effects_user_effects_tree_view.Items.Add(playerParentItem);
             effects_user_effects_tree_view.Items.Add(vehicleParentItem);
             effects_user_effects_tree_view.Items.Add(pedsParentItem);
-            effects_user_effects_tree_view.Items.Add(screenParentItem);
             effects_user_effects_tree_view.Items.Add(timeParentItem);
             effects_user_effects_tree_view.Items.Add(weatherParentItem);
             effects_user_effects_tree_view.Items.Add(miscParentItem);
@@ -394,8 +386,6 @@ namespace ConfigApp
             twitch_user_chance_system_retain_chance_enable.IsEnabled = agreed;
             twitch_user_random_voteable_enable.IsEnabled = agreed;
             twitch_user_random_voteable_enable_label.IsEnabled = agreed;
-            twitch_permitted_usernames.IsEnabled = agreed;
-            twitch_permitted_usernames_label.IsEnabled = agreed;
         }
 
         private void OnlyNumbersPreviewTextInput(object sender, TextCompositionEventArgs e)
@@ -464,37 +454,35 @@ namespace ConfigApp
         {
             TreeMenuItem curTreeMenuItem = (TreeMenuItem)((TreeViewItem)((Grid)((Border)((ContentPresenter)((StackPanel)((Button)sender).Parent).TemplatedParent).Parent).Parent).TemplatedParent).DataContext;
 
-            string effectId = null;
+            EffectType effectType = EffectType._EFFECT_ENUM_MAX;
             foreach (var pair in m_treeMenuItemsMap)
             {
                 if (pair.Value == curTreeMenuItem)
                 {
-                    effectId = pair.Key;
+                    effectType = pair.Key;
 
                     break;
                 }
             }
 
-            if (effectId != null)
+            if (effectType != EffectType._EFFECT_ENUM_MAX)
             {
-                var effectInfo = EffectsMap[effectId];
-                var effectData = GetEffectData(effectId);
+                EffectInfo effectInfo = EffectsMap[effectType];
+                EffectData effectData = GetEffectData(effectType);
 
-                var effectConfig = new EffectConfig(effectId, effectData, effectInfo);
+                EffectConfig effectConfig = new EffectConfig(effectData, effectInfo);
                 effectConfig.ShowDialog();
 
                 if (effectConfig.IsSaved)
                 {
                     effectData.TimedType = effectConfig.effectconf_timer_type_enable.IsChecked.Value ? (EffectTimedType)effectConfig.effectconf_timer_type.SelectedIndex
-                        : effectInfo.IsShort ? EffectTimedType.TimedShort : EffectTimedType.TimedNormal;
+                        : effectInfo.IsShort ? EffectTimedType.TIMED_SHORT : EffectTimedType.TIMED_NORMAL;
                     effectData.CustomTime = effectConfig.effectconf_timer_time_enable.IsChecked.Value
                         ? effectConfig.effectconf_timer_time.Text.Length > 0 ? int.Parse(effectConfig.effectconf_timer_time.Text) : -1 : -1;
                     effectData.Permanent = effectConfig.effectconf_timer_permanent_enable.IsChecked.Value;
                     effectData.WeightMult = effectConfig.effectconf_effect_weight_mult.SelectedIndex + 1;
                     effectData.ExcludedFromVoting = effectConfig.effectconf_exclude_voting_enable.IsChecked.Value;
                     effectData.CustomName = effectConfig.effectconf_effect_custom_name.Text.Trim();
-                    Key shortcut = (Key)effectConfig.effectconf_effect_shortcut_combo.SelectedItem;
-                    effectData.Shortcut = KeyInterop.VirtualKeyFromKey(shortcut);
                 }
             }
         }

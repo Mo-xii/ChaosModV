@@ -4,12 +4,12 @@ static void OnStart()
 {
 	static constexpr Hash modelHash = -835930287;
 
-	Ped playerPed                   = PLAYER_PED_ID();
-	Vector3 playerPos               = GET_ENTITY_COORDS(playerPed, false);
+	Ped playerPed = PLAYER_PED_ID();
+	Vector3 playerPos = GET_ENTITY_COORDS(playerPed, false);
 
-	static const Hash playerGroup   = GET_HASH_KEY("PLAYER");
-	static const Hash civGroup      = GET_HASH_KEY("CIVMALE");
-	static const Hash femCivGroup   = GET_HASH_KEY("CIVFEMALE");
+	static const Hash playerGroup = GET_HASH_KEY("PLAYER");
+	static const Hash civGroup = GET_HASH_KEY("CIVMALE");
+	static const Hash femCivGroup = GET_HASH_KEY("CIVFEMALE");
 
 	Hash relationshipGroup;
 	ADD_RELATIONSHIP_GROUP("_HOSTILE_JESUS", &relationshipGroup);
@@ -42,11 +42,10 @@ static void OnStart()
 	SET_PED_FIRING_PATTERN(ped, 0xC6EE6B4C);
 }
 
-// clang-format off
-REGISTER_EFFECT(OnStart, nullptr, nullptr, EffectInfo
+static RegisterEffect registerEffect(EFFECT_ANGRY_JESUS, OnStart, EffectInfo
 	{
 		.Name = "Spawn Griefer Jesus",
 		.Id = "spawn_grieferjesus",
-		.EffectGroupType = EEffectGroupType::SpawnEnemySpecial
+		.EEffectGroupType = EEffectGroupType::SpawnEnemySpecial
 	}
 );

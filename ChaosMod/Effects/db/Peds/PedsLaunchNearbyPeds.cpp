@@ -1,9 +1,10 @@
 #include <stdafx.h>
 
-struct SpacePed
+static struct SpacePed
 {
 	SpacePed(Ped ped, Vector3 vel) : Ped(ped), Vel(vel)
 	{
+
 	}
 
 	Ped Ped;
@@ -33,16 +34,15 @@ static void OnStart()
 
 	WAIT(0);
 
-	for (const SpacePed &spacePed : spacePeds)
+	for (const SpacePed& spacePed : spacePeds)
 	{
-		const Vector3 &vel = spacePed.Vel;
+		const Vector3& vel = spacePed.Vel;
 
 		SET_ENTITY_VELOCITY(spacePed.Ped, vel.x, vel.y, 100.f);
 	}
 }
 
-// clang-format off
-REGISTER_EFFECT(OnStart, nullptr, nullptr, EffectInfo
+static RegisterEffect registerEffect(EFFECT_LAUNCH_ALL_PEDS, OnStart, EffectInfo
 	{
 		.Name = "Launch All Nearby Peds Up",
 		.Id = "peds_launchnearby"

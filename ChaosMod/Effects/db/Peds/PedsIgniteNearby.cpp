@@ -11,11 +11,9 @@ static void OnStart()
 	}
 }
 
-// clang-format off
-REGISTER_EFFECT(OnStart, nullptr, nullptr, EffectInfo
+static RegisterEffect registerEffect(EFFECT_IGNITE_PEDS, OnStart, EffectInfo
 	{
 		.Name = "Ignite All Nearby Peds",
-		.Id = "peds_ignite",
-		.IncompatibleWith = { "peds_invincible" }
+		.Id = "peds_ignite"
 	}
 );

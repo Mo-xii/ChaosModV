@@ -36,8 +36,7 @@ static void OnTick()
 	}
 }
 
-// clang-format off
-REGISTER_EFFECT(nullptr, OnStop, OnTick, EffectInfo
+static RegisterEffect registerEffect(EFFECT_MIN_DAMAGE, nullptr, OnStop, OnTick, EffectInfo
 	{
 		.Name = "Minimal Damage",
 		.Id = "peds_mindmg",

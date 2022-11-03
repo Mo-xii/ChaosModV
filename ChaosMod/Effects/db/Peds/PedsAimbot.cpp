@@ -12,8 +12,7 @@ static void OnTick()
 	}
 }
 
-// clang-format off
-REGISTER_EFFECT(nullptr, nullptr, OnTick, EffectInfo
+static RegisterEffect registerEffect(EFFECT_PEDS_AIMBOT, nullptr, nullptr, OnTick, EffectInfo
 	{
 		.Name = "Aimbot Peds",
 		.Id = "peds_aimbot",

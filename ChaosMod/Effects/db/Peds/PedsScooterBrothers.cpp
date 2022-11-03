@@ -1,18 +1,15 @@
 #include <stdafx.h>
 
-#include "Util/Vehicle.h"
-
 static void OnStart()
 {
 	static const Hash faggioHash = GET_HASH_KEY("FAGGIO");
 	SetSurroundingPedsInVehicles(faggioHash, -1);
 }
 
-// clang-format off
-REGISTER_EFFECT(OnStart, nullptr, nullptr, EffectInfo
+static RegisterEffect registerEffect(EFFECT_PEDS_SCOOTERBROTHERS, OnStart, EffectInfo
 	{
 		.Name = "Scooter Brothers",
 		.Id = "peds_scooterbrothers",
-		.EffectGroupType = EEffectGroupType::TrafficSpawner
+		.EEffectGroupType = EEffectGroupType::TrafficSpawner
 	}
 );

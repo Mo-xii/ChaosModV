@@ -1,5 +1,5 @@
 /*
-    Effect by Joshuax8
+	Effect by Joshuax8
 */
 
 #include <stdafx.h>
@@ -12,8 +12,7 @@ static void OnTick()
 	}
 }
 
-// clang-format off
-REGISTER_EFFECT(nullptr, nullptr, OnTick, EffectInfo
+static RegisterEffect registerEffect(EFFECT_PEDS_ETERNAL_SCREAMS, nullptr, nullptr, OnTick, EffectInfo
 	{
 		.Name = "Eternal Screams",
 		.Id = "peds_eternal_screams",

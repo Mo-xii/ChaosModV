@@ -10,8 +10,7 @@ static void OnStart()
 	}
 }
 
-// clang-format off
-REGISTER_EFFECT(OnStart, nullptr, nullptr, EffectInfo
+static RegisterEffect registerEffect(EFFECT_VEHS_LAUNCH, OnStart, EffectInfo
 	{
 		.Name = "Launch All Vehicles Up",
 		.Id = "vehs_upupaway"

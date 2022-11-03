@@ -12,8 +12,7 @@ static void OnStart()
 	}
 }
 
-// clang-format off
-REGISTER_EFFECT(OnStart, nullptr, nullptr, EffectInfo
+static RegisterEffect registerEffect(EFFECT_VEH_POP_TIRES, OnStart, EffectInfo
 	{
 		.Name = "Pop Tires Of Every Vehicle",
 		.Id = "playerveh_poptires"

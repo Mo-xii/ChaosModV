@@ -1,5 +1,5 @@
 /*
-    Effect by ubscal, modified from Jesus take the wheel
+	Effect by ubscal, modified from Jesus take the wheel
 */
 
 #include <stdafx.h>
@@ -25,6 +25,7 @@ static void OnStart()
 
 		SET_ENTITY_PROOFS(FranklinDrive, true, false, false, false, false, false, false, false);
 
+		
 		Vector3 coords;
 		coords.x = -52;
 		coords.y = -1106.88;
@@ -38,10 +39,10 @@ static void OnStart()
 	else
 	{
 
-		Vector3 playerPos          = GET_ENTITY_COORDS(playerPed, false);
-		float heading              = GET_ENTITY_HEADING(playerPed);
+		Vector3 playerPos = GET_ENTITY_COORDS(playerPed, false);
+		float heading = GET_ENTITY_HEADING(playerPed);
 		static const Hash carModel = GET_HASH_KEY("BJXL");
-		Vehicle veh                = CreatePoolVehicle(carModel, playerPos.x, playerPos.y, playerPos.z, heading);
+		Vehicle veh = CreatePoolVehicle(carModel, playerPos.x, playerPos.y, playerPos.z, heading);
 		SET_VEHICLE_COLOURS(veh, 88, 0);
 		SET_VEHICLE_ENGINE_ON(veh, true, true, false);
 		static constexpr Hash modelHash = -1692214353;
@@ -57,6 +58,7 @@ static void OnStart()
 
 		SET_ENTITY_PROOFS(FranklinDrive, true, false, false, false, false, false, false, false);
 
+
 		Vector3 coords;
 		coords.x = -52;
 		coords.y = -1106.88;
@@ -67,13 +69,13 @@ static void OnStart()
 		SET_PED_KEEP_TASK(FranklinDrive, true);
 		SET_BLOCKING_OF_NON_TEMPORARY_EVENTS(FranklinDrive, true);
 	}
+		
 }
 
-// clang-format off
-REGISTER_EFFECT(OnStart, nullptr, nullptr, EffectInfo
+static RegisterEffect registerEffect(EFFECT_REPOSSESSION, OnStart, EffectInfo
 	{
 		.Name = "Repossession",
 		.Id = "veh_repossession",
-		.EffectGroupType = EEffectGroupType::SpawnGeneric,
+		.EEffectGroupType = EEffectGroupType::SpawnGeneric,
 	}
 );

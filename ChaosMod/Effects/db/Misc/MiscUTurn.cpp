@@ -36,8 +36,7 @@ static void OnStart()
 	SET_GAMEPLAY_CAM_RELATIVE_HEADING(camHeading);
 }
 
-// clang-format off
-REGISTER_EFFECT(OnStart, nullptr, nullptr, EffectInfo
+static RegisterEffect registerEffect(EFFECT_MISC_UTURN, OnStart, EffectInfo
 	{
 		.Name = "U-Turn",
 		.Id = "misc_uturn"

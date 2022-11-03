@@ -2,42 +2,53 @@
 
 #include "Failsafe.h"
 
-#include "Components/EffectDispatcher.h"
-
-#include "Util/OptionsManager.h"
-#include "Util/PoolSpawner.h"
-
-Failsafe::Failsafe() : Component()
+Failsafe::Failsafe()
 {
 	m_bEnabled = g_OptionsManager.GetConfigValue<bool>("EnableFailsafe", OPTION_DEFAULT_FAILSAFE);
 	if (!m_bEnabled)
 	{
 		LOG("Failsafe has been disabled in the config!");
-	}
 
-	m_piStateGlobal = nullptr;
-}
-
-void Failsafe::SetGlobalIndex(int idx)
-{
-	ms_iStateGlobalIdx = idx;
-}
-
-int Failsafe::GetGlobalIndex()
-{
-	return ms_iStateGlobalIdx;
-}
-
-void Failsafe::OnRun()
-{
-	if (!m_bEnabled || !ms_iStateGlobalIdx)
-	{
 		return;
 	}
 
-	if (!m_piStateGlobal)
+	eGameVersion eGameVer = getGameVersion();
+	m_bEnabled = eGameVer >= VER_1_0_2215_0_STEAM
+		&& eGameVer < VER_SIZE
+		|| DoesFileExist("chaosmod\\.forcefailsafe");
+
+	if (!m_bEnabled)
 	{
-		m_piStateGlobal = reinterpret_cast<int *>(getGlobalPtr(ms_iStateGlobalIdx));
+		LOG("Failsafe is incompatible with this version.");
+		LOG("Use the .forcefailsafe feature flag to enable it anyways.");
+
+		return;
+	}
+
+	LOG("Failsafe enabled");
+
+	switch (eGameVer)
+	{
+	case VER_1_0_2215_0_STEAM:
+	case VER_1_0_2215_0_NOSTEAM:
+	case VER_1_0_2245_0_STEAM:
+	case VER_1_0_2245_0_NOSTEAM:
+		m_piStateGlobal = reinterpret_cast<int*>(getGlobalPtr(98955));
+
+		break;
+	case VER_1_0_2374_0_STEAM:
+	case VER_1_0_2374_0_NOSTEAM:
+		m_piStateGlobal = reinterpret_cast<int*>(getGlobalPtr(99370));
+
+		break;
+	}
+}
+
+void Failsafe::Run()
+{
+	if (!m_bEnabled)
+	{
+		return;
 	}
 
 	if (!*m_piStateGlobal && m_iLastState)
@@ -55,7 +66,7 @@ void Failsafe::OnRun()
 		case 3:
 			LOG("[3 Fails] Clear most recent effect");
 
-			GetComponent<EffectDispatcher>()->ClearMostRecentEffect();
+			g_pEffectDispatcher->ClearMostRecentEffect();
 
 			break;
 		case 4:
@@ -67,7 +78,7 @@ void Failsafe::OnRun()
 		case 5:
 			LOG("[5 Fails] Clear all effects and spawned entities");
 
-			GetComponent<EffectDispatcher>()->ClearEffects(false);
+			g_pEffectDispatcher->ClearEffects(false);
 			ClearEntityPool();
 
 			m_cFailCounts = 0;

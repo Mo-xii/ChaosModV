@@ -29,8 +29,7 @@ static void OnStart()
 	}
 }
 
-// clang-format off
-REGISTER_EFFECT(OnStart, nullptr, nullptr, EffectInfo
+static RegisterEffect registerEffect(EFFECT_HEAL, OnStart, EffectInfo
 	{
 		.Name = "HESOYAM",
 		.Id = "player_heal"

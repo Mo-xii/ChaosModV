@@ -14,12 +14,11 @@ static void OnTick()
 	SET_SUPER_JUMP_THIS_FRAME(player);
 }
 
-// clang-format off
-REGISTER_EFFECT(nullptr, OnStop, OnTick, EffectInfo
+static RegisterEffect registerEffect(EFFECT_SUPER_RUN, nullptr, OnStop, OnTick, EffectInfo
 	{
 		.Name = "Super Run & Super Jump",
 		.Id = "player_superrun",
 		.IsTimed = true,
-		.IncompatibleWith = { "player_nosprint" }
+		.IncompatibleWith = { EFFECT_NO_SPRINT_JUMP }
 	}
 );

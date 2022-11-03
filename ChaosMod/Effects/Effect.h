@@ -1,57 +1,47 @@
 #pragma once
 
-#include "LuaScripts.h"
+#include "EffectsInfo.h"
+#include "EffectIdentifier.h"
+#include "EEffectTimedType.h"
 
-#include "Effects/EEffectTimedType.h"
-#include "Effects/EffectIdentifier.h"
-#include "Effects/EffectsInfo.h"
+#include "../LuaScripts.h"
 
 #include <string>
-#include <algorithm>
 
 #define _NODISCARD [[nodiscard]]
 
-#define _EFFECT_CONCAT(a, b) a##b
-#define EFFECT_CONCAT(a, b) _EFFECT_CONCAT(a, b)
-#define REGISTER_EFFECT(OnStart, OnStop, OnTick, ...)                                         \
-	namespace                                                                                 \
-	{                                                                                         \
-		RegisterEffect EFFECT_CONCAT(effect, __LINE__)(OnStart, OnStop, OnTick, __VA_ARGS__); \
-	}
-
 struct RegisteredEffect
 {
-  private:
-	EffectIdentifier m_EffectIdentifier;
+private:
+	EffectIdentifier m_EffectIdentifier = _EFFECT_ENUM_MAX;
 
-	void (*m_pOnStart)() = nullptr;
-	void (*m_pOnStop)()  = nullptr;
-	void (*m_pOnTick)()  = nullptr;
+	void(*m_pOnStart)() = nullptr;
+	void(*m_pOnStop)() = nullptr;
+	void(*m_pOnTick)() = nullptr;
 
-	bool m_bIsRunning    = false;
+	bool m_bIsRunning = false;
 
-  public:
+public:
 	RegisteredEffect()
 	{
+	
 	}
 
-	RegisteredEffect(const std::string &szScriptId, void (*pOnStart)(), void (*pOnStop)(), void (*pOnTick)())
-	    : m_EffectIdentifier(szScriptId), m_pOnStart(pOnStart), m_pOnStop(pOnStop), m_pOnTick(pOnTick)
+	RegisteredEffect(EEffectType effectType, void(*pOnStart)(), void(*pOnStop)(), void(*pOnTick)())
+		: m_EffectIdentifier(effectType), m_pOnStart(pOnStart), m_pOnStop(pOnStop), m_pOnTick(pOnTick)
 	{
+
 	}
 
-	RegisteredEffect(const std::string &szScriptId) : m_EffectIdentifier(szScriptId, true)
+	RegisteredEffect(const std::string& szScriptId)
+		: m_EffectIdentifier(szScriptId)
 	{
+
 	}
 
-	bool operator==(const EffectIdentifier &effectIdentifier)
+	bool operator==(const EffectIdentifier& effectIdentifier)
 	{
 		return m_EffectIdentifier == effectIdentifier;
-	}
-
-	const EffectIdentifier &GetIndentifier() const
-	{
-		return m_EffectIdentifier;
 	}
 
 	void Start()
@@ -62,7 +52,7 @@ struct RegisteredEffect
 
 			if (m_EffectIdentifier.IsScript())
 			{
-				LuaScripts::Execute(m_EffectIdentifier.GetEffectId(), "OnStart");
+				LuaScripts::Execute(m_EffectIdentifier.GetScriptId(), "OnStart");
 			}
 			else if (m_pOnStart)
 			{
@@ -79,7 +69,7 @@ struct RegisteredEffect
 
 			if (m_EffectIdentifier.IsScript())
 			{
-				LuaScripts::Execute(m_EffectIdentifier.GetEffectId(), "OnStop");
+				LuaScripts::Execute(m_EffectIdentifier.GetScriptId(), "OnStop");
 			}
 			else if (m_pOnStop)
 			{
@@ -88,13 +78,13 @@ struct RegisteredEffect
 		}
 	}
 
-	void Tick()
+	inline void Tick()
 	{
 		if (m_bIsRunning)
 		{
 			if (m_EffectIdentifier.IsScript())
 			{
-				LuaScripts::Execute(m_EffectIdentifier.GetEffectId(), "OnTick");
+				LuaScripts::Execute(m_EffectIdentifier.GetScriptId(), "OnTick");
 			}
 			else if (m_pOnTick)
 			{
@@ -103,12 +93,12 @@ struct RegisteredEffect
 		}
 	}
 
-	_NODISCARD inline bool IsRunning() const
+	inline _NODISCARD bool IsRunning() const
 	{
 		return m_bIsRunning;
 	}
 
-	_NODISCARD inline bool IsScript() const
+	inline _NODISCARD bool IsScript() const
 	{
 		return m_EffectIdentifier.IsScript();
 	}
@@ -116,16 +106,16 @@ struct RegisteredEffect
 
 inline std::vector<RegisteredEffect> g_RegisteredEffects;
 
-_NODISCARD inline RegisteredEffect *GetRegisteredEffect(const EffectIdentifier &effectIdentifier)
+inline _NODISCARD RegisteredEffect* GetRegisteredEffect(const EffectIdentifier& effectIdentifier)
 {
-	const auto &result = std::find(g_RegisteredEffects.begin(), g_RegisteredEffects.end(), effectIdentifier);
+	const auto& result = std::find(g_RegisteredEffects.begin(), g_RegisteredEffects.end(), effectIdentifier);
 
 	return result != g_RegisteredEffects.end() ? &*result : nullptr;
 }
 
 inline void ClearRegisteredScriptEffects()
 {
-	for (auto it = g_RegisteredEffects.begin(); it != g_RegisteredEffects.end();)
+	for (auto it = g_RegisteredEffects.begin(); it != g_RegisteredEffects.end(); )
 	{
 		if (it->IsScript())
 		{
@@ -140,18 +130,52 @@ inline void ClearRegisteredScriptEffects()
 
 class RegisterEffect
 {
+private:
 	RegisteredEffect m_RegisteredEffect;
 
-  public:
-	RegisterEffect(void (*pOnStart)(), void (*pOnStop)(), void (*pOnTick)(), EffectInfo &&effectInfo)
+public:
+	RegisterEffect(EEffectType eEffectType, void(*pOnStart)(), void(*pOnStop)(), void(*pOnTick)(), EffectInfo&& effectInfo)
 	{
-		m_RegisteredEffect = { effectInfo.Id, pOnStart, pOnStop, pOnTick };
-
-		g_RegisteredEffects.push_back(m_RegisteredEffect);
-		g_dictEffectsMap[effectInfo.Id] = std::move(effectInfo);
+		_RegisterEffect(eEffectType, pOnStart, pOnStop, pOnTick, std::move(effectInfo));
 	}
 
-	RegisterEffect(const RegisterEffect &) = delete;
+	RegisterEffect(EEffectType eEffectType, void(*pOnStart)(), void(*pOnStop)(), EffectInfo&& effectInfo)
+	{
+		_RegisterEffect(eEffectType, pOnStart, pOnStop, nullptr, std::move(effectInfo));
+	}
 
-	RegisterEffect &operator=(const RegisterEffect &) = delete;
+	RegisterEffect(EEffectType eEffectType, void(*pOnStart)(), EffectInfo&& effectInfo)
+	{
+		_RegisterEffect(eEffectType, pOnStart, nullptr, nullptr, std::move(effectInfo));
+	}
+
+	RegisterEffect(EEffectType eEffectType, EffectInfo&& effectInfo)
+	{
+		_RegisterEffect(eEffectType, nullptr, nullptr, nullptr, std::move(effectInfo));
+	}
+
+	RegisterEffect(const RegisterEffect&) = delete;
+
+	RegisterEffect& operator=(const RegisterEffect&) = delete;
+
+private:
+	void _RegisterEffect(EEffectType eEffectType, void(*pOnStart)(), void(*pOnStop)(), void(*pOnTick)(), EffectInfo&& effectInfo)
+	{
+		m_RegisteredEffect = RegisteredEffect(eEffectType, pOnStart, pOnStop, pOnTick);
+
+		g_RegisteredEffects.push_back(m_RegisteredEffect);
+
+		EEffectGroupType effectGroupType = effectInfo.EEffectGroupType;
+		if (effectGroupType != EEffectGroupType::None)
+		{
+			if (!g_dictAllEffectGroupMemberCount[effectGroupType])
+			{
+				g_dictAllEffectGroupMemberCount[effectGroupType] = 0;
+			}
+
+			g_dictAllEffectGroupMemberCount[effectGroupType]++;
+		}
+
+		g_dictEffectsMap[eEffectType] = std::move(effectInfo);
+	}
 };

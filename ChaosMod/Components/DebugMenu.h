@@ -11,12 +11,12 @@ using DWORD = unsigned long;
 
 class DebugMenu : public Component
 {
-  private:
+private:
 	struct DebugEffect
 	{
-		DebugEffect(const EffectIdentifier &effectIdentifier, const std::string &szEffectName)
-		    : m_EffectIdentifier(effectIdentifier), m_szEffectName(szEffectName)
+		DebugEffect(const EffectIdentifier& effectIdentifier, const std::string& szEffectName) : m_EffectIdentifier(effectIdentifier), m_szEffectName(szEffectName)
 		{
+
 		}
 
 		EffectIdentifier m_EffectIdentifier;
@@ -27,17 +27,16 @@ class DebugMenu : public Component
 
 	bool m_bIsEnabled;
 
-	int m_iSelectedIdx     = 0;
-	bool m_bVisible        = false;
+	int m_iSelectedIdx = 0;
+	bool m_bVisible = false;
 
-	DWORD m_ulRepeatTime   = 0;
+	DWORD m_ulRepeatTime = 0;
 	bool m_bDispatchEffect = false;
 
-  protected:
+public:
 	DebugMenu();
 
-  public:
-	virtual void OnRun() override;
+	virtual void Run() override;
 
 	_NODISCARD bool IsEnabled() const;
 
@@ -45,8 +44,4 @@ class DebugMenu : public Component
 
 	void SetVisible(bool bState);
 	_NODISCARD bool IsVisible() const;
-
-	template <class T>
-	requires std::is_base_of_v<Component, T>
-	friend struct ComponentHolder;
 };

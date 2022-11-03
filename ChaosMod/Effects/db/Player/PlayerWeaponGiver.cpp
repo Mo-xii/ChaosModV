@@ -1,7 +1,5 @@
 #include <stdafx.h>
 
-#include "Memory/WeaponPool.h"
-
 static void OnStartAll()
 {
 	Ped playerPed = PLAYER_PED_ID();
@@ -12,11 +10,10 @@ static void OnStartAll()
 	}
 }
 
-// clang-format off
-REGISTER_EFFECT(OnStartAll, nullptr, nullptr, EffectInfo
+static RegisterEffect registerEffect(EFFECT_GIVE_ALL_WEPS, OnStartAll, EffectInfo
 	{
 		.Name = "Give All Weapons",
 		.Id = "player_allweps",
-		.EffectGroupType = EEffectGroupType::Weapons
+		.EEffectGroupType = EEffectGroupType::Weapons
 	}
 );

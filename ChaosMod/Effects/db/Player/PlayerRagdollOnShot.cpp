@@ -1,12 +1,10 @@
 #include <stdafx.h>
 
-#include "Memory/WeaponPool.h"
-
 static void OnTick()
 {
 	Ped playerPed = PLAYER_PED_ID();
 
-	int curTime   = GET_GAME_TIMER();
+	int curTime = GET_GAME_TIMER();
 
 	for (Hash weapon : Memory::GetAllWeapons())
 	{
@@ -28,12 +26,11 @@ static void OnTick()
 	}
 }
 
-// clang-format off
-REGISTER_EFFECT(nullptr, nullptr, OnTick, EffectInfo
+static RegisterEffect registerEffect(EFFECT_PLAYER_SHOT_RAGDOLL, nullptr, nullptr, OnTick, EffectInfo
 	{
 		.Name = "Player Ragdolls When Shot",
 		.Id = "player_ragdollondmg",
 		.IsTimed = true,
-		.IncompatibleWith = { "player_noragdoll" }
+		.IncompatibleWith = { EFFECT_NO_RAGDOLL }
 	}
 );

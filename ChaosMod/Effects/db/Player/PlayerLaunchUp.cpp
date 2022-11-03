@@ -22,8 +22,7 @@ static void OnStart()
 	}
 }
 
-// clang-format off
-REGISTER_EFFECT(OnStart, nullptr, nullptr, EffectInfo
+static RegisterEffect registerEffect(EFFECT_PLAYER_LAUNCH, OnStart, EffectInfo
 	{
 		.Name = "Launch Player Up",
 		.Id = "player_upupaway"

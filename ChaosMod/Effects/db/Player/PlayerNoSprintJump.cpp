@@ -6,12 +6,11 @@ static void OnTick()
 	DISABLE_CONTROL_ACTION(0, 22, true);
 }
 
-// clang-format off
-REGISTER_EFFECT(nullptr, nullptr, OnTick, EffectInfo
+static RegisterEffect registerEffect(EFFECT_NO_SPRINT_JUMP, nullptr, nullptr, OnTick, EffectInfo
 	{
 		.Name = "No Sprint & No Jump",
 		.Id = "player_nosprint",
 		.IsTimed = true,
-		.IncompatibleWith = { "player_superrun" }
+		.IncompatibleWith = { EFFECT_SUPER_RUN }
 	}
 );

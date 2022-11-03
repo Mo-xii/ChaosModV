@@ -15,8 +15,7 @@ static void OnStart()
 	}
 }
 
-// clang-format off
-REGISTER_EFFECT(OnStart, nullptr, nullptr, EffectInfo
+static RegisterEffect registerEffect(EFFECT_PEDS_FLEE, OnStart, EffectInfo
 	{
 		.Name = "All Nearby Peds Are Fleeing",
 		.Id = "peds_flee"

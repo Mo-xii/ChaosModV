@@ -13,8 +13,7 @@ static void OnStart()
 	}
 }
 
-// clang-format off
-REGISTER_EFFECT(OnStart, nullptr, nullptr, EffectInfo
+static RegisterEffect registerEffect(EFFECT_PLAYER_POOR, OnStart, EffectInfo
 	{
 		.Name = "Poor Boy",
 		.Id = "poorboi"

@@ -1,5 +1,5 @@
 /*
-    Effect by dzwdz
+	Effect by dzwdz
 */
 
 #include <stdafx.h>
@@ -16,8 +16,7 @@ static void OnTick()
 	}
 }
 
-// clang-format off
-REGISTER_EFFECT(nullptr, nullptr, OnTick, EffectInfo
+static RegisterEffect registerEffect(EFFECT_PLAYER_LOCKCAMERA, nullptr, nullptr, OnTick, EffectInfo
 	{
 		.Name = "Lock Camera",
 		.Id = "player_lockcamera",
